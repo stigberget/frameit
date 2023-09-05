@@ -309,7 +309,7 @@ def frameit(
     max_size=1e4,
     cache_dir="./.cache/frameit",
     itertype=tuple,
-) -> Union[FRAME_OR_SERIES, Iterable[FRAME_OR_SERIES]]:
+) -> FRAME_OR_SERIES:
     def wrapper(func):
         @wraps(func)
         def cache(*args, **kwargs):

@@ -1,6 +1,9 @@
+# Binary files
+.DS_Store
+
 # Python cache and native caching
 .cache
-__pycache___
+__pycache__
 
 # Build artefacts
 build
@@ -9,5 +12,5 @@ dist
 # Poetry artefacts
 poetry.lock
 
-# Virtual envrionments
+# Virtual environments
 .venv

@@ -1,0 +1,13 @@
+# Python cache and native caching
+.cache
+__pycache___
+
+# Build artefacts
+build
+dist
+
+# Poetry artefacts
+poetry.lock
+
+# Virtual envrionments
+.venv

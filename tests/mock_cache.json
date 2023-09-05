@@ -1,0 +1,28 @@
+[
+    [
+        {
+            "cache_path" : "/users/.cache/frameit",
+            "hash_key" : "mod=__main___fun=load_data_argsize=128_a=1_b=3_c=3",
+            "items" : [
+                "mod=__main___fun=load_data_argsize=128_a=1_b=3_c=3_ITEM=1",
+                "mod=__main___fun=load_data_argsize=128_a=1_b=3_c=3_ITEM=2",
+                "mod=__main___fun=load_data_argsize=128_a=1_b=3_c=3_ITEM=3"
+
+            ],
+            "expected" : 3
+        }
+    ],
+    [
+        {
+            "cache_path" : "/users/.cache/frameit",
+            "hash_key" : "mod=__main___fun=load_data_argsize=128_a=1_b=3_c=3",
+            "items" : [
+                "mod=__main___fun=load_data_argsize=128_a=1_b=3_c=3_ITEM=1",
+                "mod=__main___fun=load_data_argsize=128_a=1_b=3_c=3_ITEM=2",
+                "mod=__main___fun=load_data_argsize=128_a=1_b=3_c=3_ITEM=3",
+                ""
+            ],
+            "expected" : 3
+        }
+    ]
+]

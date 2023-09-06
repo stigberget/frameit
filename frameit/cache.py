@@ -200,6 +200,23 @@ def cache_item(
     cache_meta: List[Dict[str, Any]],
     hash_key: Dict[str, Any],
 ) -> None:
+    """
+    Saves a single or set of DataFrame(s) to the cache, and associates the
+    DataFrame(s) with their `hash_key`.
+
+    Parameters
+    ----------
+    dfs: FRAME_OR_SERIES
+        A pandas or polars Series or DataFrame
+    cache_path: str
+        Path to the frameit cache.
+    cache_meta:
+        The full cache hash_key store.
+    hash_key: Dict[str, Any]
+        A unique identifier that is determined by the function name, where the
+        function is defined, and the function arguments passed to the function.
+    """
+
     if not os.path.isdir(cache_path):
         os.makedirs(cache_path)
         cache_meta = []

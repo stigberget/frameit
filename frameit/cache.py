@@ -100,7 +100,9 @@ def _generate_cache_hash_key(
     return hash_key
 
 
-def evict(incoming_size, cache_path, max_size, max_time) -> List[Dict[str, Any]]:
+def evict(
+    incoming_size: int, cache_path: str, max_size: float, max_time: float
+) -> List[Dict[str, Any]]:
     """
     Removes items in the file cache using the LRU method. An item is evicted if its
     lifetime in the cache exceeds the maximum allowable time (`max_time`) of an item.

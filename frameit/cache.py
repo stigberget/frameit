@@ -39,6 +39,19 @@ def _get_cache_path() -> str:
 
 
 def _load_cache_meta(cache_path: str) -> List[Dict[str, Any]]:
+    """
+    Loads cache metadata into memory.
+
+    Parameters
+    ----------
+    cache_path: str
+        Path to the frameit cache.
+
+    Returns
+    -------
+    List[Dict[str, Any]]
+        Cache metadata associating unique hash keys to a set of files in the cache.
+    """
     cache_meta_path = os.path.join(cache_path, "frameit.json")
     if not os.path.isfile(cache_meta_path):
         return []
@@ -53,6 +66,17 @@ def _load_cache_meta(cache_path: str) -> List[Dict[str, Any]]:
 
 
 def _save_cache_meta(cache_path: str, cache_meta: List[Dict[str, Any]]) -> None:
+    """
+    Saves cache metadata to memory (in json format)
+
+    Parameters
+    ----------
+    cache_path: str
+        Path to the frameit cache.
+    cache_meta: List[Dict[str, Any]]
+        Cache metadata.
+    """
+
     cache_meta_path = os.path.join(cache_path, "frameit.json")
     if not os.path.exists(cache_path):
         os.makedirs(cache_path)
@@ -75,13 +99,13 @@ def _generate_cache_hash_key(
     fargs:
         Function argument values.
     fkwargs:
-        Function keyword argument values
+        Function keyword argument values.
     pkg:
         The type of the DataFrame returned from `func`.
 
     Returns
     ----------
-    dict:
+    Dict[str, Any]:
         The unique hash key.
     """
     args_size = sum([getsizeof(fargs)] + [getsizeof(farg) for farg in fargs]) + sum(
@@ -101,11 +125,28 @@ def _generate_cache_hash_key(
 
 
 def evict(
-    incoming_size: int, cache_path: str, max_size: float, max_time: float
+    incoming_size: float, cache_path: str, max_size: float, max_time: float
 ) -> List[Dict[str, Any]]:
     """
-    Removes items in the file cache using the LRU method. An item is evicted if its
-    lifetime in the cache exceeds the maximum allowable time (`max_time`) of an item.
+    Removes items in the file cache following the LRU approach. An item is evicted if its
+    lifetime in the cache exceeds the maximum allowable time (`max_time`) of an item, or
+    if the total size of the cache is exceeded.
+
+    Parameters
+    ----------
+    incoming_size: float
+        The size (in kB) of the incoming item
+    cache_path: str
+        Path to the frameit cache.
+    max_size: float
+        Maximum set size (in kB) of the cache.
+    max_time: float
+        Maximum residence time (in min).
+
+    Returns
+    -------
+    List[Dict[str, Any]]
+        An updated version of the cache metadata.
     """
     stats = get_cache_stats(cache_path)
     meta = _load_cache_meta(cache_path)
@@ -182,7 +223,7 @@ def in_cache(cache_path: str, hash_key: Dict[str, Any]) -> List[str]:
 
     Returns
     ----------
-    str:
+    List[str]:
         A list of the files that correspond to the given `hash_key`. If the `hash_key`
         does not exist in the cache, an empty `list` is returned.
     """
@@ -209,7 +250,7 @@ def cache_item(
     Parameters
     ----------
     dfs: FRAME_OR_SERIES
-        A pandas or polars Series or DataFrame
+        A collection of pandas or polars `DataFrame` or `Series`.
     cache_path: str
         Path to the frameit cache.
     cache_meta:
@@ -271,7 +312,7 @@ def get_size(dfs: FRAME_OR_SERIES) -> int:
 
     Parameters
     ----------
-    dfs: Union[FRAME_OR_SERIES, Iterable[FRAME_OR_SERIES]]
+    dfs: FRAME_OR_SERIES
         A collection of pandas or polars `DataFrame` or `Series`.
 
     Returns

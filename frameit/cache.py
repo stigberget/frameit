@@ -285,6 +285,29 @@ def get_size(dfs: FRAME_OR_SERIES) -> int:
 def _verify_hashkey(
     cache_path: str, func: Callable, fargs: tuple, fkwargs: dict
 ) -> Tuple[List[str], str]:
+    """
+    Checks whether the `hash_key` for a unique set of arguments, exists
+    in the cache.
+
+    Parameters
+    ----------
+    cache_path: str
+        The path to the frameit cache.
+    func: Callable
+        The functiion callable calling the function.
+    fargs: Tuple
+        A tuple containing the arguments passed to `func`.
+    fkwargs: Dict[str, Any]
+        A dictionary containing the keyword arguments passed to `func`.
+
+    Returns
+    -------
+    Tuple[List[str], str]
+        A list of files associated with a given `hash_key`, and the associated
+        DataFrame library generating the DataFrame.
+
+    """
+
     hash_key_pandas = _generate_cache_hash_key(
         func, fargs=fargs, fkwargs=fkwargs.copy(), pkg="pandas"
     )

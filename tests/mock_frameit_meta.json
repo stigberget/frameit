@@ -1,0 +1,27 @@
+
+[
+    {
+        "mod": "__main__",
+        "fun": "multiply",
+        "argsize": "12000",
+        "pkg": "pandas",
+        "args": {
+            "df" : "[/n column1 , column2 /n 0.000, 0.002 /n]",
+            "factor" : "24"
+        },
+        "files": ["5jg3ad3521l.parquet"]
+    },
+    {
+        "mod": "__main__",
+        "fun": "split",
+        "argsize": "12000",
+        "pkg": "pandas",
+        "args": {
+            "df" : "[/n column1 , column2 /n 0.000, 0.002 /n]",
+            "nframes" : "3"
+        },
+        "files": ["g3g5tgg3521l.parquet", "prrvad35rls.parquet", "badgrfadfa.parquet"]
+    }
+
+
+]

@@ -1,3 +1,4 @@
+import copy
 import inspect
 import os
 from time import time
@@ -62,3 +63,34 @@ def get_cache_stats(path) -> Dict[str, Any]:
         stats["total_size"] += memsize
 
     return stats
+
+
+def deepcopy(obj, memo=None):
+    if memo is None:
+        memo = {}
+
+    if id(obj) in memo:
+        return memo[id(obj)]
+
+    if isinstance(obj, (int, str, float, bool)):
+        # For basic types, return a deep copy
+        return copy.deepcopy(obj)
+    elif isinstance(obj, list):
+        # Create a new list and add deep copies of its elements
+        new_list = []
+        memo[id(obj)] = new_list
+        for item in obj:
+            new_list.append(deepcopy(item, memo))
+        return new_list
+    elif isinstance(obj, dict):
+        # Create a new dictionary and add deep copies of its items
+        new_dict = {}
+        memo[id(obj)] = new_dict
+        for key, value in obj.items():
+            new_key = deepcopy(key, memo)
+            new_value = deepcopy(value, memo)
+            new_dict[new_key] = new_value
+        return new_dict
+    else:
+        # For other types, return a shallow copy
+        return copy.copy(obj)

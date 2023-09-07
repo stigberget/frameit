@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "frameit"
-version = "0.1.0"
+version = "0.1.1"
 description = "A quick and dirty tool for caching Pandas and Polars DataFrames"
 authors = ["Filip Wennberg <lhfwennberg@gmail.com>"]
 readme = "README.md"

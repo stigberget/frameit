@@ -1,4 +1,3 @@
-import copy
 import json
 import os
 import platform
@@ -12,7 +11,12 @@ from typing import Any, Callable, Dict, Iterable, List, Tuple, Union, get_args
 import pandas as pd
 import polars as pl
 
-from frameit.utils import get_cache_stats, getargspec, parse_package_from_type
+from frameit.utils import (
+    deepcopy,
+    get_cache_stats,
+    getargspec,
+    parse_package_from_type
+)
 
 CHAR_LIMIT = 500
 TIME_LIMIT = 60
@@ -396,8 +400,8 @@ def frameit(
     def wrapper(func):
         @wraps(func)
         def cache(*args, **kwargs):
-            fargs = copy.copy(args)
-            fkwargs = copy.copy(kwargs)
+            fargs = deepcopy(args)
+            fkwargs = deepcopy(kwargs)
 
             if max_size > CACHE_LIMIT:
                 raise ValueError(

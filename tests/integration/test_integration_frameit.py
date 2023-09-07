@@ -42,6 +42,15 @@ class TestIntegrationForStandardArguments(unittest.TestCase):
         else:
             return tuple((self.pldf * integer for integer in integers))
 
+    @frameit(cache_dir=PATH)
+    def dummy_with_mutables(self, integers: list, dftype: str):
+        integers.append(9999)
+
+        if dftype == "pandas":
+            return self.pddf * integers[0]
+        else:
+            return self.pldf * integers[0]
+
     def setUp(self) -> None:
         self.pldf = pl.DataFrame({"col1": [1, 2, 3, 4], "col2": [1, 2, 3, 4]})
         self.pddf = pd.DataFrame({"col1": [1, 2, 3, 4], "col2": [1, 2, 3, 4]})
@@ -193,6 +202,46 @@ class TestIntegrationForStandardArguments(unittest.TestCase):
         self.assertEqual(args["string"], "testing")
         self.assertEqual(args["integers"], "[1, 2, 3, 4]")
         self.assertEqual(args["dftype"], "polars")
+
+    @patch("pandas.read_parquet", wraps=pd.read_parquet)
+    def test_arg_inspection_on_mutable_args_for_pandas_return_types_with_std_args(
+        self, mock_pandas_read_parquet
+    ):
+        # ARRANGE
+        argself = (
+            "test_arg_inspection_on_mutable_args_for_pandas_return_types_with_std_args "
+            + "(tests.integration.test_integration_frameit."
+            + "TestIntegrationForStandardArguments)"
+        )
+
+        # ACT
+        expected = self.dummy_with_mutables(integers=[0, 1, 2, 3, 4], dftype="pandas")
+        result = self.dummy_with_mutables(
+            integers=[
+                0,
+                1,
+                2,
+                3,
+                4,
+            ],
+            dftype="pandas",
+        )
+
+        cache = inspect_cache().pop(0)
+        args = cache["args"]
+
+        # ASSERT
+        pd.testing.assert_frame_equal(result, expected)
+
+        mock_pandas_read_parquet.assert_any_call(f"{PATH}/{cache['files'][0]}")
+
+        self.assertEqual(cache["mod"], "tests.integration.test_integration_frameit")
+        self.assertEqual(cache["fun"], "dummy_with_mutables")
+        self.assertEqual(cache["pkg"], "pandas")
+        self.assertEqual(args["self"], argself)
+        self.assertEqual(args["string"], "testing")
+        self.assertEqual(args["integers"], "[1, 2, 3, 4]")
+        self.assertEqual(args["dftype"], "pandas")
 
 
 class TestIntegrationForDataFrameArgument(unittest.TestCase):
